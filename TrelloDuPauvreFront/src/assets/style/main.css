@@ -1,0 +1,73 @@
+.checkBoxInput {
+    background-color: aqua;
+}
+
+.filtersDropDown .filterSectionRow .filterSectionMain .v-slider-thumb__label {
+    background-color: transparent !important;
+    bottom: -26px !important;
+    font-size: 18px;
+    font-weight: 600;
+    color: #444;
+}
+
+.filtersDropDown .filterSectionRow .filterSectionMain .v-slider-thumb__label::before{
+    content: none;
+}
+
+.modalContainer .leftCol .prioritySection .v-slider-thumb__label {
+    background-color: transparent !important;
+    bottom: -26px !important;
+    font-size: 18px;
+    font-weight: 600;
+    color: #444;
+}
+
+.modalContainer .leftCol .prioritySection .v-slider-thumb__label::before{
+    content: none;
+}
+
+.v3dp__elements button.selected span {
+    background-color: #409DBB !important;
+}
+.v3dp__elements button span:hover {
+    background-color: #409DBB !important;
+}
+
+.v3dp__elements button:hover span{
+    background-color: #409DBB !important;
+}
+
+.v3dp__datepicker input:focus-visible {
+    outline: 2px #409DBB solid !important;
+    border-radius: 5px;
+}
+
+.filtersDropDown .filterSectionRow .filterSectionMain .deadlineFilterRow .deadlineRow .picker {
+    cursor: pointer !important; 
+    width: 100%;
+    background-color: #fafbfc;
+    outline: 2px #D9EBF1 solid !important;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-top: 2px;
+}
+
+.filtersDropDown .filterSectionRow .filterSectionMain .deadlineFilterRow .deadlineRow .picker:focus-visible {
+    outline: 2px #409DBB solid !important;
+}
+
+.modalContainer .backgroundRow .v-input__details {
+    display: none;
+}
+
+.modalProject .backgroundRow .colorRow .v-color-picker .v-color-picker-canvas {
+    max-height: 100px;
+}
+
+.modalProject .backgroundRow .colorRow .v-color-picker .v-color-picker__controls{
+    padding: 0 16px;
+}
+
+.modalProject .backgroundRow .colorRow .v-color-picker .v-color-picker__controls .v-color-picker-preview {
+    margin-bottom: 5px;
+}
