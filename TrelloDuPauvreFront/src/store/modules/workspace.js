@@ -4,7 +4,6 @@ export default {
     namespaced: true,
     state: {
         allWorkspaces: [],
-        selectedWorkspace: undefined,
     },
     getters: {
 
@@ -13,9 +12,6 @@ export default {
         setAllWorkspaces(state, allWorkspaces){
             state.allWorkspaces = allWorkspaces
         },
-        setSelectedWorkspace(state, selectedWorkspace){
-            state.selectedWorkspace = selectedWorkspace
-        }
     },
     actions: {
         async getAllWorkspaces({commit}) {

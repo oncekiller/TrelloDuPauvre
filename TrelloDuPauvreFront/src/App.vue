@@ -2,23 +2,30 @@
   <v-app>
     <v-main>
       <nav-bar/>
-      <router-view />
+      <alert-component/>
+      <div class="content">
+         <router-view v-if="!reloadPage"/>
+         <reload-component v-if="reloadPage"/>
+      </div>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import NavBar from './components/common/NavBar.vue';
+import AlertComponent from './components/common/AlertComponent.vue';
+import ReloadComponent from './components/ReloadComponent.vue';
+import { mapState } from 'vuex';
 export default {
   name: 'App',
-
   components: {
-    NavBar
-},
-
-  data: () => ({
-    //
-  }),
+    NavBar,
+    AlertComponent,
+    ReloadComponent
+  },
+  computed: {
+    ...mapState("commonStore", ["reloadPage"])
+  },
   directives: {
     "click-outside": {
       bind: function (el, binding, vnode) {

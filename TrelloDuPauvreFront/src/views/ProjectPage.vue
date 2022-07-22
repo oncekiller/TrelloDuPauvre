@@ -1,21 +1,15 @@
 <template>
     <div class="projectPage" :style="getStyleContainer">
-        <ModalTicket 
-            ref="modalTicket"
-            v-model="modalOpenData"
-            :modalType="modalType"
-            @handleCloseAction="handleModalClose"
-        />
-        <CreateHeaderDropDown
-            :elements="[
+        <ModalTicket ref="modalTicket" v-model="modalOpenData" :modalType="modalType"
+            @handleCloseAction="handleModalClose" />
+        <CreateHeaderDropDown :elements="[
                 {
                     name: 'Story',
                     emit: 'createStoryAction'
                 },
-            ]"
-            @createStoryAction="handleAddStory"
-        />
-        <div :style="getSubMenuStyle" v-if="subMenuDisplay" class="subMenu" v-click-outside="() =>  {this.subMenuDisplay = false}">
+            ]" @createStoryAction="handleAddStory" />
+        <div :style="getSubMenuStyle" v-if="subMenuDisplay" class="subMenu"
+            v-click-outside="() =>  {this.subMenuDisplay = false}">
             <div class="subMenuTitle">
                 <span>Actions</span>
                 <v-icon @click="() =>  {this.subMenuDisplay = false}">mdi-close</v-icon>
@@ -24,79 +18,38 @@
             <p @click="handleDeleteSubMenu()">Supprimer</p>
             <p v-if="!draggableDisabled" @click="handleMoveSubMenu">Déplacer</p>
         </div>
-        <MoveDropDown 
-            :style="getSubMenuStyle"
-            v-if="moveDropDownOpen && !draggableDisabled"
-            :projectId="selectedProject?.projectId"
-            :storyId="getMoveDropDownStoryId"
-            :ticketId="getMoveDropDownTicketId"
-            :type="subMenuItemType" 
-            @handleCloseAction="handleCloseMoveDropDown"
-            @handleMoveTicketAction="handleMoveTicketDropDown"
-            @handleMoveStoryAction="handleMoveStoryDropDown"
-        />
+        <MoveDropDown :style="getSubMenuStyle" v-if="moveDropDownOpen && !draggableDisabled"
+            :projectId="selectedProject?.projectId" :storyId="getMoveDropDownStoryId"
+            :ticketId="getMoveDropDownTicketId" :type="subMenuItemType" @handleCloseAction="handleCloseMoveDropDown"
+            @handleMoveTicketAction="handleMoveTicketDropDown" @handleMoveStoryAction="handleMoveStoryDropDown" />
         <v-container class="projectPageContainer">
-            <v-row class="filterRow">
-                <v-col>
-                    <ActionButtonDropList 
-                        class="projectDropList"
-                        :elementsList="getProjectsName"
-                        :selectedElementIndex="getProjectElementIndex"
-                        :width="130"
-                        @handleSelectionAction="handleSelectProject"
-                    />
-                </v-col>
-                <v-col>
-                    <ActionButtonDropList 
-                        class="sortDropList"
-                        :elementsList="sortElementsList"
-                        :selectedElementIndex="getSortElementsListIndex"
-                        :width="130"
-                        @handleSelectionAction="handleSelectSort"
-                    />
-                </v-col>
-                <v-col class="sortCol">
-                    <FiltersDropDown/>
-                </v-col>
-            </v-row>
-            <v-row class="storiesRow">           
-                <draggable 
-                    v-model="filteredProjectTicketsData" 
-                    :disabled="draggableDisabled"
-                    group="stories" 
-                    @end="handleDragStory" 
-                    item-key="storyId"
-                    class="draggable"
-                >
-                    <StoryPanel 
-                        v-for="(projectStory, key) in filteredProjectTicketsData"
-                        :key="key" 
-                        class="storyPanelCol"
-                        :ref="'story' + projectStory.storyId"
-                        :style="'width:270px'"
-                        :storyId="projectStory.storyId"
-                        :name="projectStory.name"
-                        :tickets="projectStory.tickets"
-                        @handleEditTicketAction="handleEditTicket"
-                        @handleAddTicketAction="handleAddTicket"
-                        @handleSubMenuClickAction="handleSubMenuClick"
-                        @handleUpdateStoryAction="handleUpdateStory" 
-                        @handleDragAction="handleDragTicket"
-                    />
+            <div class="filterRow">
+                <FiltersDropDown />
+                <ActionButtonDropList class="projectDropList" :elementsList="getProjectsName"
+                    :selectedElementIndex="getProjectElementIndex" :width="130"
+                    @handleSelectionAction="handleSelectProject" />
+                <ActionButtonDropList class="sortDropList" :elementsList="sortElementsList"
+                    :selectedElementIndex="getSortElementsListIndex" :width="130"
+                    @handleSelectionAction="handleSelectSort" />
+            </div>
+            <v-row class="storiesRow">
+                <draggable v-model="filteredProjectTicketsData" :disabled="draggableDisabled" group="stories"
+                    @end="handleDragStory" item-key="storyId" class="draggable">
+                    <StoryPanel v-for="(projectStory, key) in filteredProjectTicketsData" :key="key"
+                        class="storyPanelCol" :ref="'story' + projectStory.storyId" :style="'width:270px'"
+                        :storyId="projectStory.storyId" :name="projectStory.name" :tickets="projectStory.tickets"
+                        @handleEditTicketAction="handleEditTicket" @handleAddTicketAction="handleAddTicket"
+                        @handleSubMenuClickAction="handleSubMenuClick" @handleUpdateStoryAction="handleUpdateStory"
+                        @handleDragAction="handleDragTicket" />
                 </draggable>
-                   
+
                 <div>
-                    <button class="addStoryButton" v-if="!editFieldStoryOpen" @click="handleAddStory()">Ajouter une story</button>
-                    <EditField 
-                        class="editField"
-                        ref="editField"
-                        :type="variantBlue"
-                        v-click-outside="() => {this.editFieldStoryOpen = false}"
-                        v-if="editFieldStoryOpen"
-                        :validationButtonLabel="'Ajouter'"
-                        @handleValidationAction="handleValidationEditFieldStory"
-                        @handleCloseAction="handleCloseEditFieldStory"
-                    />
+                    <button class="addStoryButton" v-if="!editFieldStoryOpen" @click="handleAddStory()">Ajouter une
+                        story</button>
+                    <EditField class="editField" ref="editField" :type="variantBlue"
+                        v-click-outside="() => {this.editFieldStoryOpen = false}" v-if="editFieldStoryOpen"
+                        :validationButtonLabel="'Ajouter'" @handleValidationAction="handleValidationEditFieldStory"
+                        @handleCloseAction="handleCloseEditFieldStory" />
                 </div>
             </v-row>
         </v-container>
@@ -654,84 +607,96 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
     .projectPage {
         height: 100%;
         background-size: cover !important;
-        padding-top: 60px;
     }
-    .projectPage .subMenu{
-        background-color: #fff;
-        color: #000;
-        border-radius: 5px;
-        position: absolute;
-        box-shadow: 0 8px 16px -4px #091e4240, 0 0 0 1px #091e4214;
-        padding-top: 5px;
-        padding-bottom: 2px;
-        z-index: 2;
-        width: 150px;
-    }
+        .projectPage .subMenu{
+            background-color: #fff;
+            color: #000;
+            border-radius: 5px;
+            position: absolute;
+            box-shadow: 0 8px 16px -4px #091e4240, 0 0 0 1px #091e4214;
+            padding-top: 5px;
+            padding-bottom: 2px;
+            z-index: 2;
+            width: 150px;
+        }
+
+        .projectPage .v-row{
+            padding: 0;
+        }
+        .projectPage .v-col{
+            padding: 0;
+        }
     
-    .projectPage .subMenu p:hover{
-        cursor: pointer;
-        background-color: #D9EBF1;
-    }
-    .projectPage .subMenu p {
-        padding-left: 7px;
-        padding-right: 7px;
-        padding-top: 2px;
-        text-align: left;
-    }
+        .projectPage .subMenu p:hover{
+            cursor: pointer;
+            background-color: #D9EBF1;
+        }
+        .projectPage .subMenu p {
+            padding-left: 7px;
+            padding-right: 7px;
+            padding-top: 2px;
+            text-align: left;
+        }
 
-    .projectPage .subMenu .subMenuTitle {
-        border-bottom: 1px solid #aaa;
-        margin-left: 7px;
-        margin-right: 7px;
-        text-align: center;
-        margin-bottom: 5px;
-        padding-bottom: 5px;
-    }
+        .projectPage .subMenu .subMenuTitle {
+            border-bottom: 1px solid #aaa;
+            margin-left: 7px;
+            margin-right: 7px;
+            text-align: center;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+        }
 
-    .projectPage .subMenu .subMenuTitle i{
-        float: right
-    }
-    .projectPage .subMenu .subMenuTitle span{
-        margin-left: 10px;
-    }
-    .projectPage .v-row{
-        padding: 0;
-    }
-    .projectPage .v-col{
-        padding: 0;
-    }
+            .projectPage .subMenu .subMenuTitle i{
+                float: right
+            }
+            .projectPage .subMenu .subMenuTitle span{
+                margin-left: 10px;
+            }
     .projectPage .projectPageContainer{
         padding-left: 30px;
         padding-right: 30px;
         max-width: 100%;
         height: 100%;
     }
-    .projectPage .projectPageContainer .filterRow {
-        z-index: 2;
-        height: 100px;
-    }
+        .projectPage .projectPageContainer .filterRow {
+            width: fit-content;
+            display: flex;
+            flex-wrap: wrap ;
+            z-index: 2;
+            height: 70px;
+            margin-bottom: 20px;
+        }
+            .projectPage .projectPageContainer .filterRow .v-container {
+                margin-left: 0px;
+                margin-right: 15px;
+            }
         .projectPage .projectPageContainer .sortCol {
             z-index: 2;
         }
-    .projectPage .projectPageContainer .storiesRow {
-        flex-wrap: unset;
-        overflow-x:scroll;
-        height: calc(100% - 60px)
-    }
-    /* .projectPage .projectPageContainer .storiesRow::-webkit-scrollbar {
-        display: none;
-    } */
-    .projectPage .projectPageContainer .storiesRow .storyPanelCol{
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-    .projectPage .projectPageContainer .storiesRow .addStoryButton {
-        margin-left: 10px;
-        width: 340px;
-        text-align: left;
-    }
+        .projectPage .projectPageContainer .storiesRow {
+            flex-wrap: unset;
+            overflow-x:scroll;
+            height: calc(100% - 60px)
+        }
+            /* .projectPage .projectPageContainer .storiesRow::-webkit-scrollbar {
+                display: none;
+            } */
+            .projectPage .projectPageContainer .storiesRow .storyPanelCol{
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+            .projectPage .projectPageContainer .storiesRow .addStoryButton {
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #409DBB;
+                font-weight: 700;
+                font-size: 14px !important;
+                color: #fff;
+                min-width: 150px;
+            }
 
-    .projectPage .projectPageContainer .storiesRow .draggable{
-        display: flex
-    }
+            .projectPage .projectPageContainer .storiesRow .draggable{
+                display: flex
+            }
 </style>

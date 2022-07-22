@@ -76,13 +76,13 @@ export default {
     },
     computed: {
         noItem(){
-            return this.checkListItems.length == 0
+            return this.checkListItems?.filter(checkListItem => checkListItem.updatedStatus != 'deleted')?.length == 0
         },
         getCheckListItems(){
             return this.checkListItems
         },
         checkListProgress(){
-            const total = this.checkListItems.length
+            const total = this.checkListItems?.filter(checkListItem => checkListItem.updatedStatus != 'deleted')?.length
             return total == 0 
                 ? 0 
                 : Math.trunc(

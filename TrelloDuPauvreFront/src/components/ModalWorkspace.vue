@@ -81,6 +81,7 @@ export default {
 <style scoped>
     .modalWorkspace {
         width: 500px;
+        max-width: 90%;
         font-size: 16px;
         margin-top: 3%;
         border-radius: 10px;

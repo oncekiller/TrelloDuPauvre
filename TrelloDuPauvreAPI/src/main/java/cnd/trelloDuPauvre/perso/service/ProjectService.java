@@ -3,8 +3,10 @@ package cnd.trelloDuPauvre.perso.service;
 import cnd.trelloDuPauvre.perso.Exceptions.EntityNotFoundException;
 import cnd.trelloDuPauvre.perso.model.Image;
 import cnd.trelloDuPauvre.perso.model.Project;
+import cnd.trelloDuPauvre.perso.model.Workspace;
 import cnd.trelloDuPauvre.perso.repository.ImageRepository;
 import cnd.trelloDuPauvre.perso.repository.ProjectRepository;
+import cnd.trelloDuPauvre.perso.repository.WorkspaceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class ProjectService {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private WorkspaceRepository workspaceRepository;
 
 
     public List<Project> getAllProjects() {
@@ -46,34 +51,37 @@ public class ProjectService {
         Optional<Project> updatedProject = projectRepository.findById(projectId);
 
         if (updatedProject.isPresent()) {
-            if(project.getBgImage() == null){
-                Project newProject = updatedProject.get();
-                newProject.setName(project.getName());
-                newProject.setIsFavorite(project.getIsFavorite());
-                newProject.setCreationDate(project.getCreationDate());
-                newProject.setLastConsultationDate(project.getLastConsultationDate());
-                newProject.setBgColor(project.getBgColor());
-                newProject.setBgImage(null);
-                return projectRepository.save(newProject);
-            }else {
-                int imageId = project.getBgImage().getImageId();
+            Project newProject = updatedProject.get();
+            newProject.setName(project.getName());
+            newProject.setIsFavorite(project.getIsFavorite());
+            newProject.setCreationDate(project.getCreationDate());
+            newProject.setLastConsultationDate(project.getLastConsultationDate());
+            newProject.setBgColor(project.getBgColor());
+            newProject.setBgImage(null);
+            newProject.setWorkspace(null);
+            if(project.getWorkspace() != null){
+                int workspaceId = project.getWorkspace().getWorkspaceId();
+                Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
 
+                //Check if the workspace of the new story exist
+                if (workspace.isPresent()) {
+                    newProject.setWorkspace(workspace.get());
+                } else {
+                    throw new EntityNotFoundException("Workspace with id " + workspaceId + " not found");
+                }
+            }
+            if(project.getBgImage() != null){
+                int imageId = project.getBgImage().getImageId();
                 Optional<Image> image = imageRepository.findById(imageId);
 
-                //Check if project of the new story exist
+                //Check if image of the new story exist
                 if (image.isPresent()) {
-                    Project newProject = updatedProject.get();
-                    newProject.setName(project.getName());
-                    newProject.setIsFavorite(project.getIsFavorite());
-                    newProject.setCreationDate(project.getCreationDate());
-                    newProject.setLastConsultationDate(project.getLastConsultationDate());
-                    newProject.setBgColor(project.getBgColor());
                     newProject.setBgImage(image.get());
-                    return projectRepository.save(newProject);
                 } else {
                     throw new EntityNotFoundException("Image with id " + imageId + " not found");
                 }
             }
+            return projectRepository.save(newProject);
         }else {
             throw new EntityNotFoundException("Project with id " + projectId + " not found");
         }

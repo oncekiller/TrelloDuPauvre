@@ -48,7 +48,7 @@
                                     <v-col>
                                         <ActionButtonDropList 
                                             :preSelectionField="'Choisir un nature...'"
-                                            :width="250" 
+                                            :width="150" 
                                             :elementsList="getElementsListNature"
                                             :selectedElementIndex="0" 
                                             @handleSelectionAction="handleUpdateNature" 
@@ -63,7 +63,7 @@
                                     <v-col>
                                         <ActionButtonDropList 
                                             :preSelectionField="'Choisir un status...'"
-                                            :width="250" 
+                                            :width="150" 
                                             :elementsList="getElementsListStatus"
                                             :selectedElementIndex="0" 
                                             @handleSelectionAction="handleUpdateStatus"
@@ -95,10 +95,7 @@
                                             </v-col>
                                         </v-row>
                                         <v-row class="deadlineRow" v-if="!this.filterDelay">
-                                            <v-col cols="5">
-                                                Date d'échéance:
-                                            </v-col>
-                                            <v-col cols="7">
+                                            <v-col cols="12">
                                                 <v-row>
                                                     <v-col cols="10">
                                                         <Datepicker 
@@ -318,7 +315,7 @@ export default {
 
 <style scoped>
     .filtersDropDown {
-        width: 400px;
+        max-width: 133px;
         height: fit-content;
         z-index: 2;
         padding: 0;
@@ -372,8 +369,10 @@ export default {
     }
 
     .filtersDropDown .filterSectionRow {
+        position: absolute;
         padding: 15px;
         border-radius: 5px;
+        width: 300px;
         box-shadow: 0 8px 16px -4px #091e4240, 0 0 0 1px #091e4214;
         background-color: #fff;
     }

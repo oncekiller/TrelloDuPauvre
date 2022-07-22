@@ -61,7 +61,7 @@
             handleSelection(index){
                 this.selectedElementIndexData = index
                 this.selectedElement = this.getElementList[index]
-                this.$emit("handleSelectionAction", index)
+                this.$emit("handleSelectionAction", this.preSelectionField ? index - 1 : index)
             },
             handleClose(event){
                 this.selectedElementIndexData = 0
@@ -91,13 +91,14 @@
                 return this.preSelectionField != "" ?  [this.preSelectionField, ...this.elementsList]: this.elementsList
             },
             isCloseDisplay(){
+                console.log(this.selectedElementIndexData)
                 return this.preSelectionField != "" 
-                    ? this.selectedElementIndexData != 0
+                    ? this.selectedElementIndexData > 0
                     : false
             },
             isChevronDisplay(){
                 return this.preSelectionField != "" 
-                        ? this.selectedElementIndexData == 0
+                        ? this.selectedElementIndexData <= 0
                         : true
             }
         },

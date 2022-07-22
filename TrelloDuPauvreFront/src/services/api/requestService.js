@@ -1,3 +1,4 @@
+import store from '@/store/index'
 const axios = require("axios")
 
 const addParamsToUrl = (url, params) => {
@@ -16,7 +17,13 @@ const addParamsToUrl = (url, params) => {
  * @param {*} body body de l'url
  */
 async function request(axiosMethod, url, body) {
-  const response = await axiosMethod(url, body )
+  let response;
+  try {
+    response = await axiosMethod(url, body )
+  } catch (error) {
+    store.commit("commonStore/setAlertDisplay", true)
+    return
+  }
   if (response.status == 204) {
     return response
   } else {

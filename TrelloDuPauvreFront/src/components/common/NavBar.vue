@@ -7,6 +7,7 @@
       </v-toolbar-title>
       <v-toolbar-items>
         <v-btn
+          v-if="!reloadPage"
           flat
           class="createButton"
           @click="this.setCreateHeaderDropDownOpen(!this.createHeaderDropDownOpen)"
@@ -29,7 +30,7 @@ export default {
         }
     },
     computed: {
-      ...mapState("commonStore", ["createHeaderDropDownOpen"]),
+      ...mapState("commonStore", ["createHeaderDropDownOpen","reloadPage"]),
     },
     methods: {
       ...mapMutations("commonStore", ["setCreateHeaderDropDownOpen"]),
@@ -39,6 +40,7 @@ export default {
 
 <style scoped>
     .navBar {
+        top: 0;
         position: fixed;
         width: 100%;
         z-index: 3;
@@ -58,4 +60,16 @@ export default {
         .navBar .createButton {
             color: #fff;
         }
+    @media (max-width:500px) {
+      .navBar .v-toolbar-title {
+        max-width: none;
+      }
+        .navBar .v-toolbar__content .flex-grow-1{
+          display: none;
+        }
+        .navBar .v-toolbar__content button{
+          float: right;
+        }
+    }
+    
 </style>

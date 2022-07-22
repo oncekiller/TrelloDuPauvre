@@ -9,7 +9,7 @@
                     <v-row class="workspaceRow">
                         <span class="header">Workspace</span>
                         <ActionButtonDropList 
-                            :width="230" 
+                            :width="225" 
                             :elementsList="getElementsListWorkspace"
                             :selectedElementIndex="getWorkspaceIndex" 
                             :preSelectionField="'Choisir un workspace'"
@@ -21,11 +21,10 @@
                                 class="checkBoxInput" 
                                 type="checkbox"
                                 v-model="isBackground"
-                                @click="handleCheckBoxClick()"
                             />
                         </v-col>
                         <v-col>
-                            <span>
+                            <span @click="handleCheckBoxClick()">
                                 Ajouter un fond d'écran
                             </span>
                         </v-col>
@@ -35,10 +34,15 @@
                             <v-row class="headerRow">
                                 <span>Fond d'écran</span>
                             </v-row>
-                            <v-row class="switchRow">
+                            <v-row class="switchRow large">
                                 <span class="colorSwitchSpan" :class="!bgImage ? 'selected' : ''">Ajouter une couleur</span>
                                 <v-switch class="bgSwitch" :class="bgImage ? 'image' : 'color'" v-model="bgImage"></v-switch>
                                 <span class="imageSwitchSpan" :class="bgImage ? 'selected' : ''">Ajouter une image</span>
+                            </v-row>
+                            <v-row class="switchRow small">
+                                <span class="colorSwitchSpan" :class="!bgImage ? 'selected' : ''">Couleur</span>
+                                <v-switch class="bgSwitch" :class="bgImage ? 'image' : 'color'" v-model="bgImage"></v-switch>
+                                <span class="imageSwitchSpan" :class="bgImage ? 'selected' : ''">Image</span>
                             </v-row>
                             <v-row v-if="bgImage" class="imageRow">
                                 <span>Image de fond d'écran: </span>
@@ -192,11 +196,14 @@ export default {
             this.colorPicker= false
             this.bgImage= false
             this.isBackground= false
+        },
+        handleCheckBoxClick(){
+            this.isBackground = !this.isBackground
         }
     },
     computed: {
         ...mapState("projectStore", ["selectedProject"]),
-        ...mapState("workspaceStore", ["selectedWorkspace", "allWorkspaces"]),
+        ...mapState("workspaceStore", ["allWorkspaces"]),
         projectName: {
             get(){
                 return this.selectedProject?.name
@@ -232,12 +239,12 @@ export default {
             return this.allWorkspaces?.map(workspace => workspace.name)
         },
         getWorkspaceIndex(){
-            const index =  this.allWorkspaces?.findIndex(workspace => workspace.workspaceId == this.selectedWorkspace?.workspaceId)
+            const index =  this.allWorkspaces?.findIndex(workspace => workspace.workspaceId == this.selectedProject?.workspaceId)
             return index >= 0 ? index : -1
         },
         isSaveDisabled() {
             return this.selectedProject?.name == ""
-        }
+        },
     },
 }
 </script>
@@ -245,6 +252,7 @@ export default {
 <style scoped>
     .modalProject {
         width: 500px;
+        max-width: 90%;
         font-size: 16px;
         margin-top: 3%;
         border-radius: 10px;
@@ -252,139 +260,161 @@ export default {
         padding-top: 50px;
         padding-bottom: 15px;
     }
-    .modalProject .v-col {
-        padding: 0
-    }
+        .modalProject .v-col {
+            padding: 0
+        }
 
-    .modalProject .v-row {
-        margin: 0
-    }
+        .modalProject .v-row {
+            margin: 0
+        }
     
-    .modalProject .closeButton {
-        margin-top: -40px;
-        margin-left: -5px;
-        font-size: 30px;
-        position: absolute;
-    }
-    .modalProject .headerRow span{
-        width: 100%;
-        text-align: left;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        color: #444;
-        font-size: 14px;
-        font-weight: 600;
-    }
+        .modalProject .closeButton {
+            margin-top: -40px;
+            margin-left: -5px;
+            font-size: 30px;
+            position: absolute;
+        }
+        .modalProject .workspaceRow {
+            margin-bottom: 20px;
+        }
+            .modalProject .headerRow span{
+                width: 100%;
+                text-align: left;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                color: #444;
+                font-size: 14px;
+                font-weight: 600;
+            }
 
 
-    .modalProject .labelRow .editInput {
-        border-radius: 5px;
-        padding-left: 10px;
-        width: 100%;
-        height: 30px;
-        outline: 2px #ddd solid !important;
-        margin-bottom: 20px;
-    }
+            .modalProject .labelRow .editInput {
+                border-radius: 5px;
+                padding-left: 10px;
+                width: 100%;
+                height: 30px;
+                outline: 2px #ddd solid !important;
+                margin-bottom: 20px;
+            }
 
-    .modalProject .labelRow .editInput:focus-visible {
-        outline: 2px #409DBB solid !important;
-    }
+            .modalProject .labelRow .editInput:focus-visible {
+                outline: 2px #409DBB solid !important;
+            }
 
-    .modalProject .backgroundRow {
-        height: fit-content;
-        margin-bottom: 40px;
-    }
-    .modalProject .checkBoxRow {
-        margin-bottom: 20px;
-    }
-    .modalProject .checkBoxRow .checkBoxInput{
-        width: 17px;
-        height: 17px;
-        border: #fff;
-        margin-top: 2px;
-        cursor: pointer;
-    }
+        .modalProject .backgroundRow {
+            height: fit-content;
+            margin-bottom: 40px;
+        }
+        .modalProject .checkBoxRow {
+            margin-bottom: 20px;
+        }
+            .modalProject .checkBoxRow span {
+                cursor: pointer;
+            }
+            .modalProject .checkBoxRow .checkBoxInput{
+                width: 17px;
+                height: 17px;
+                border: #fff;
+                margin-top: 5px;
+                cursor: pointer;
+            }
 
-    .modalProject .backgroundRow .switchRow{
-        justify-content: center;
-    }
+            .modalProject .backgroundRow .switchRow{
+                justify-content: center;
+            }
+            .modalProject .backgroundRow .switchRow.small{
+                display: none;
+            }
 
-    .modalProject .backgroundRow .switchRow span{
-        height: fit-content;
-        margin-top: 10px;
-        border-radius: 5px;
-        padding: 5px 10px;
-    }
-    .modalProject .backgroundRow .switchRow .colorSwitchSpan.selected{
-        background-color: #FFDC84;
-    }
-    .modalProject .backgroundRow .switchRow .imageSwitchSpan.selected{
-        background-color: #D9EBF1;
-    }
-    .modalProject .backgroundRow .switchRow .bgSwitch{
-        height: fit-content;
-        max-width: 40px;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-    .modalProject .backgroundRow .switchRow .bgSwitch.image{
-        color: #D9EBF1;
-    }
+                .modalProject .backgroundRow .switchRow span{
+                    height: fit-content;
+                    margin-top: 10px;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                }
+                .modalProject .backgroundRow .switchRow .colorSwitchSpan.selected{
+                    background-color: #FFDC84;
+                }
+                .modalProject .backgroundRow .switchRow .imageSwitchSpan.selected{
+                    background-color: #D9EBF1;
+                }
+                .modalProject .backgroundRow .switchRow .bgSwitch{
+                    height: fit-content;
+                    max-width: 40px;
+                    margin-left: 20px;
+                    margin-right: 20px;
+                    margin-bottom: 20px;
+                }
+                .modalProject .backgroundRow .switchRow .bgSwitch.image{
+                    color: #D9EBF1;
+                }
 
-    .modalProject .backgroundRow .switchRow .bgSwitch.color{
-        color: #FFDC84;
-    }
-    .modalProject .backgroundRow .imageRow {
-        justify-content: center;
-    }
+                .modalProject .backgroundRow .switchRow .bgSwitch.color{
+                    color: #FFDC84;
+                }
+            .modalProject .backgroundRow .imageRow {
+                justify-content: center;
+            }
 
-    .modalProject .backgroundRow .imageRow span {
-        margin-top: 43px;
-        margin-right: 20px;
-    }
+                .modalProject .backgroundRow .imageRow span {
+                    margin-top: 43px;
+                    margin-right: 20px;
+                }
 
-    .modalProject .backgroundRow .imageRow .bgImageButton {
-        width: 200px;
-        height: 112px;
-        background-color: #D9EBF1;
-    }
-    .modalProject .backgroundRow .imageRow .iconThumbnailEdit {
-        margin-left: 180px;
-    }
-    .modalProject .backgroundRow .imageRow i {
-        font-size: 20px;
-        width: fit-content;
-    }
-    .modalProject .backgroundRow .imageRow .thumbnailImg {
-        min-width: 200px;
-        min-height: 112px;
-        max-width: 200px;
-        max-height: 112px;
-        cursor: pointer;
-    }
+                .modalProject .backgroundRow .imageRow .bgImageButton {
+                    width: 200px;
+                    height: 112px;
+                    background-color: #D9EBF1;
+                }
+                .modalProject .backgroundRow .imageRow .iconThumbnailEdit {
+                    margin-left: 180px;
+                }
+                .modalProject .backgroundRow .imageRow i {
+                    font-size: 20px;
+                    width: fit-content;
+                }
+                .modalProject .backgroundRow .imageRow .thumbnailImg {
+                    min-width: 200px;
+                    min-height: 112px;
+                    max-width: 200px;
+                    max-height: 112px;
+                    cursor: pointer;
+                }
 
-    .modalProject .backgroundRow .colorRow {
-        justify-content: center;
-    }
+            .modalProject .backgroundRow .colorRow {
+                justify-content: center;
+            }
 
-    .modalProject .backgroundRow .colorRow span {
-        margin-top: 2px;
-        margin-right: 20px;
-    }
-    .modalProject .backgroundRow .colorRow .v-color-picker {
-        max-width: 200px !important;
-    }
+                .modalProject .backgroundRow .colorRow span {
+                    margin-top: 2px;
+                    margin-right: 20px;
+                }
+                .modalProject .backgroundRow .colorRow .v-color-picker {
+                    max-width: 200px !important;
+                }
 
-    .modalProject .footerRow button {
-        background-color: #FFDC84;
-        color: #fff;
-        padding: 5px 10px;
-        height: 40px;
-        border-radius: 5px;
-    }
-    .modalProject .footerRow button:disabled {
-        background-color: #aaaaaa;
-        opacity: 0.5;
+            .modalProject .footerRow button {
+                background-color: #FFDC84;
+                color: #fff;
+                padding: 5px 10px;
+                height: 40px;
+                border-radius: 5px;
+            }
+            .modalProject .footerRow button:disabled {
+                background-color: #aaaaaa;
+                opacity: 0.5;
+            }
+
+    @media (max-width:500px) {
+        .modalProject .backgroundRow .switchRow.small{
+            display: flex;
+        }
+        .modalProject .backgroundRow .switchRow.large{
+            display: none;
+        }
+        .modalProject .backgroundRow .imageRow span {
+            display: none
+        };
     }
 
 </style>

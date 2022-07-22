@@ -196,7 +196,6 @@
             ...mapActions("imageStore", ["createImage", "getImageById"]),
             ...mapActions("workspaceStore", ["getAllWorkspaces", "deleteWorkspaceById"]),
             ...mapMutations("projectStore", [ "setSelectedProject", "setAllProjects"]),
-            ...mapMutations("workspaceStore", [ "setSelectedWorkspace"]),
             handleSelectProject(project) {
                 console.log(project)
                 this.setSelectedProject(project)
@@ -214,12 +213,6 @@
                 })))
             },
             handleAddProject(workspaceId){
-                if(workspaceId){
-                    this.setSelectedWorkspace(this.allWorkspaces?.find(workspace => workspace.workspaceId === workspaceId))
-
-                }else {
-                    this.setSelectedWorkspace(undefined)
-                }
                 this.setSelectedProject({
                     projectId: null,
                     name: "",
@@ -348,7 +341,6 @@
     .allProjects{
         margin: 0 auto !important;
         max-width: 1240px;
-        padding-top: 60px;
         height: 100%;
     }
         .allProjects .mainContainer {
@@ -471,5 +463,10 @@
                 font-size: 14px !important;
                 color: #444;
             }
+    @media (max-width:500px) {
+        .allProjects .lastConsultedProjectRow .v-row,.allProjectRow .v-row, .workspaceProjectElementRow .v-row, .workspaceProjectsRow .v-row{
+            justify-content: center;
+        }
+    }
 
 </style>

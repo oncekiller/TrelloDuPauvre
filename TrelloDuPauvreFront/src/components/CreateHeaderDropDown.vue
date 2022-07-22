@@ -94,4 +94,11 @@ export default {
             .createHeaderDropDown .actionsRow .actionRow:hover {
                 background-color: #D9EBF1;
             }
+    @media (max-width:500px) {
+        .createHeaderDropDown {
+            transform: translateX(50vw);
+            margin-left: -100px;
+            left: 0;
+        }
+    }
 </style>
