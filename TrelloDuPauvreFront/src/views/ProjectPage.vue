@@ -97,14 +97,18 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
             }
         },
         async mounted() {
-            this.resetState()
-            await Promise.all([this.getTicketsFromProjectIdMappedByStory(this.selectedProject?.projectId), this.getAllNatures(), this.getAllStatus()])
-            await this.filterProjectTickets()
+            try {
+                this.resetState()
+                await Promise.all([this.getTicketsFromProjectIdMappedByStory(this.selectedProject?.projectId), this.getAllNatures(), this.getAllStatus()])
+                await this.filterProjectTickets()
 
-            //update last consultation date
-            const newDate =  utils.formatDateTime(new Date())
-            this.updateFieldSelectedProject({fieldName: "lastConsultationDate", fieldValue: newDate})
-            await this.createUpdateSelectedProject("update")
+                //update last consultation date
+                const newDate = utils.formatDateTime(new Date())
+                this.updateFieldSelectedProject({ fieldName: "lastConsultationDate", fieldValue: newDate })
+                await this.createUpdateSelectedProject("update")
+            } catch (error) {
+                this.setReloadPage(true)
+            }
         },
         methods: {
             ...mapActions("ticketStore", [
@@ -118,6 +122,7 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
             ...mapActions("statusStore", ["getAllStatus"]),
             ...mapActions("filterStore", ["filterProjectTickets"]),
             ...mapActions("projectStore",["createUpdateSelectedProject", "updateFieldSelectedProject"]),
+            ...mapMutations("commonStore", ["setReloadPage"]),
             ...mapMutations("ticketStore", ["setSelectedTicket", "setProjectTickets", "setFilteredProjectTickets"]),
             ...mapMutations("projectStore", ["setSelectedProject"]),
             ...mapMutations("filterStore", ["setSortType"]),

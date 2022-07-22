@@ -3,6 +3,9 @@
     flex-direction: column;
     padding-top: 56px;
 }
+.v-main__wrap .content{
+    height: 100%; 
+}
 .checkBoxInput {
     background-color: aqua;
 }

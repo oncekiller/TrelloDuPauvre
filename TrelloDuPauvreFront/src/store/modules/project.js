@@ -20,7 +20,7 @@ export default {
     },
     actions: {
         async getAllProjects({commit}) {
-            let projects =  await trelloDuPauvreApiService.get("/projects")
+            let projects =  await trelloDuPauvreApiService.get("/proects")
             projects = projects.map(project => {
                 return {
                     projectId: project.projectId,

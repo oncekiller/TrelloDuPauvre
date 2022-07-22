@@ -181,20 +181,25 @@
             }
         },
         async mounted() {
-            await this.getAllProjects()
-            await this.getAllWorkspaces()
-            this.setAllProjects(await Promise.all(this.allProjects.map(async (project) =>  {
-                let image = undefined
-                if(project?.bgImageId){
-                   image = await this.getImageById(project?.bgImageId)
-                }
-                return {...project, image: image}
-            })))
+            try {
+                await this.getAllProjects()
+                await this.getAllWorkspaces()
+                this.setAllProjects(await Promise.all(this.allProjects.map(async (project) => {
+                    let image = undefined
+                    if (project?.bgImageId) {
+                        image = await this.getImageById(project?.bgImageId)
+                    }
+                    return { ...project, image: image }
+                })))
+            } catch (error) {
+                this.setReloadPage(true)
+            }
         },
         methods: {
             ...mapActions("projectStore", ["getAllProjects", "deleteProjectById", "updateProjectFavorite"]),
             ...mapActions("imageStore", ["createImage", "getImageById"]),
             ...mapActions("workspaceStore", ["getAllWorkspaces", "deleteWorkspaceById"]),
+            ...mapMutations("commonStore", ["setReloadPage"]),
             ...mapMutations("projectStore", [ "setSelectedProject", "setAllProjects"]),
             handleSelectProject(project) {
                 console.log(project)

@@ -1,7 +1,9 @@
 <template>
-    <v-alert icon="mdi-alert" class="alertComponent" type="error" v-if="display">
-        Impossible de se connecter à TrelloDuPauvre
-    </v-alert>
+    <v-scroll-x-transition mode="in" hide-on-leave="true">
+        <v-alert icon="mdi-alert" class="alertComponent" type="error" v-if="display">
+            Impossible de se connecter à TrelloDuPauvre
+        </v-alert>
+    </v-scroll-x-transition>
 </template>
 
 <script>
@@ -37,8 +39,10 @@ export default {
 <style scoped>
     .alertComponent {
         min-height: 55px;
+        margin-top: 10px;
+        margin-left: 10px;
         position: fixed;
-        width: 100%;
+        width: 300px;
         z-index: 3;
     }
 </style>
