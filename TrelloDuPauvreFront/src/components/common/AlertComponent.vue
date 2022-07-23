@@ -1,5 +1,5 @@
 <template>
-    <v-scroll-x-transition mode="in" hide-on-leave="true">
+    <v-scroll-x-transition :hide-on-leave="true">
         <v-alert icon="mdi-alert" class="alertComponent" type="error" v-if="display">
             Impossible de se connecter à TrelloDuPauvre
         </v-alert>

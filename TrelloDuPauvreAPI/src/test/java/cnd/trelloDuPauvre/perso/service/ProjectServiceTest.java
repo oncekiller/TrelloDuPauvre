@@ -2,7 +2,9 @@ package cnd.trelloDuPauvre.perso.service;
 
 import cnd.trelloDuPauvre.perso.Exceptions.EntityNotFoundException;
 import cnd.trelloDuPauvre.perso.model.Project;
+import cnd.trelloDuPauvre.perso.repository.ImageRepository;
 import cnd.trelloDuPauvre.perso.repository.ProjectRepository;
+import cnd.trelloDuPauvre.perso.repository.WorkspaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,18 +28,34 @@ import static org.mockito.Mockito.when;
 public class ProjectServiceTest {
     @Mock
     ProjectRepository projectRepository;
+    @Mock
+    ImageRepository imageRepository;
+    @Mock
+    WorkspaceRepository workspaceRepository;
     ProjectService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new ProjectService(projectRepository);
+        underTest = new ProjectService(projectRepository, imageRepository, workspaceRepository);
     }
 
     @Test
     void can_call_getAllProject() {
         //given
-        Project project1 = new Project("name");
-        Project project2 = new Project("name");
+        Project project1 = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Project project2 = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         ArrayList<Project> projects = new ArrayList<>();
         projects.add(project1);
         projects.add(project2);
@@ -51,7 +70,13 @@ public class ProjectServiceTest {
     @Test
     void can_call_getProjectById_with_validId() {
         //given
-        Project project = new Project("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         int id = new Random().nextInt(100);
         //when
         when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
@@ -79,7 +104,13 @@ public class ProjectServiceTest {
     @Test
     void can_call_createProject() {
         //given
-        Project project = new Project("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         //when
         when(projectRepository.save(any(Project.class))).thenReturn(project);
         Project result = underTest.createProject(project);
@@ -95,7 +126,13 @@ public class ProjectServiceTest {
     @Test
     void can_call_updateProject_with_validId() {
         //given
-        Project project = new Project("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         int id = new Random().nextInt(100);
         //when
         when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
@@ -118,7 +155,13 @@ public class ProjectServiceTest {
     void updateProject_with_notExistingId_shouldThrow_NotFoundException(){
         //given
         int id = new Random().nextInt(100);
-        Project project = new Project("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         //when
         //then
         assertThatThrownBy(() -> underTest.updateProject(id, project))
@@ -130,7 +173,13 @@ public class ProjectServiceTest {
     void can_call_deleteProject_with_validId_should_return_true() {
         //given
         int id = new Random().nextInt(100);
-        Project project = new Project("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         //when
         when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
         Boolean result = underTest.deleteProject(id);

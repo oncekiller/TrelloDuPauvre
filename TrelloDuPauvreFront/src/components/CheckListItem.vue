@@ -1,5 +1,5 @@
 <template>
-    <v-container :style="containerStyle" class="checkListItem" >
+    <v-container class="checkListItem" >
         <v-row v-if="!editFieldOpen" class="checkListItemInput" @click="handleCheckListItemClick()">
             <v-col cols="1">
                 <input ref="test" type="checkbox" class="checkBoxInput" :checked="this.checked" @click="(event) => handleChangeCheck(event)"/>
@@ -32,7 +32,6 @@ import EditField from './common/EditField.vue';
     props: {
         index: {type: Number, required: true},
         checkListItemLabel: {type: String, required: true, default: ""},
-        width: {type: Number, default: 350},
         checked: {type: Boolean, default: false},
     },
     data() {
@@ -64,17 +63,13 @@ import EditField from './common/EditField.vue';
             this.$emit("handleDeleteAction", this.index)
         }
     },
-    computed: {
-        containerStyle() {
-            return `width : ${this.width}px`
-        },
-    },
     components: { EditField }
 }
 </script>
 
 <style scoped>
     .checkListItem {
+         width: 350px;
          margin: 0;
          padding: 0;
     }
@@ -107,6 +102,11 @@ import EditField from './common/EditField.vue';
         display: none;
         color: #FFDC84;
         margin-top: -2px;
+    }
+    @media screen and (max-width: 750px){
+        .checkListItem {
+            width: 100%;
+        }
     }
 
 </style>

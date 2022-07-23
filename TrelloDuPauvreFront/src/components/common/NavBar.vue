@@ -1,9 +1,7 @@
 <template>
     <v-toolbar app class="navBar"> 
-      <v-toolbar-title>
-        <router-link to="/" class="routerLink">
+      <v-toolbar-title @click="goHome()">
           {{ appTitleData }}
-        </router-link>
       </v-toolbar-title>
       <v-toolbar-items>
         <v-btn
@@ -33,7 +31,11 @@ export default {
       ...mapState("commonStore", ["createHeaderDropDownOpen","reloadPage"]),
     },
     methods: {
-      ...mapMutations("commonStore", ["setCreateHeaderDropDownOpen"]),
+      ...mapMutations("commonStore", ["setCreateHeaderDropDownOpen", "setReloadPage"]),
+      async goHome(){
+        await this.$router.push("/allProjects")
+        this.setReloadPage(false)
+      }
     }
 }
 </script>
@@ -51,10 +53,11 @@ export default {
             max-width: fit-content;
             margin-right: 30px;
         }
-            .navBar .v-toolbar-title .routerLink {
+            .navBar .v-toolbar-title {
                 color: #fff;
                 font-weight: 500;
                 text-decoration: none;
+                cursor: pointer;
             }
 
         .navBar .createButton {

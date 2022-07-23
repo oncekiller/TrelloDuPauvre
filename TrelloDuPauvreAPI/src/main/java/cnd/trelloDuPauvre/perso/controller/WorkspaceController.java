@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class WorkspaceController {
 
     @Autowired

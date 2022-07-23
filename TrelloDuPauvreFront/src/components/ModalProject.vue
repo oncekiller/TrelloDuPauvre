@@ -13,7 +13,9 @@
                             :elementsList="getElementsListWorkspace"
                             :selectedElementIndex="getWorkspaceIndex" 
                             :preSelectionField="'Choisir un workspace'"
-                            @handleSelectionAction="handleUpdateWorkspace" />
+                            @handleSelectionAction="handleUpdateWorkspace" 
+                            @handleCloseAction="handleUpdateWorkspace(-1)" 
+                        />
                     </v-row>
                     <v-row class="checkBoxRow">
                         <v-col cols="1">
@@ -120,10 +122,10 @@ export default {
             }else {
                 this.bgImage = false
             }
-            this.isBackground = this.selectedProject?.bgColor || this.selectedProject?.image
+            this.isBackground = this.selectedProject?.bgColor || this.selectedProject?.image ? true : false
         },
         getBgColor(){
-            this.isBackground = this.selectedProject?.bgColor || this.selectedProject?.image
+            this.isBackground = this.selectedProject?.bgColor || this.selectedProject?.image ? true : false
         }
     },
     methods: {

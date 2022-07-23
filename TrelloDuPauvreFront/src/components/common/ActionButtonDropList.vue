@@ -59,12 +59,12 @@
                 this.open = !this.open
             },
             handleSelection(index){
-                this.selectedElementIndexData = index
+                this.selectedElementIndexData = this.preSelectionField ? index - 1 : index
                 this.selectedElement = this.getElementList[index]
                 this.$emit("handleSelectionAction", this.preSelectionField ? index - 1 : index)
             },
             handleClose(event){
-                this.selectedElementIndexData = 0
+                this.selectedElementIndexData = this.preSelectionField ? - 1 : 0
                 this.selectedElement = this.getElementList[0]
                 this.open = false
                 this.$emit("handleCloseAction")
@@ -80,25 +80,24 @@
             },
             elementClass() {
                 return (index) => {
-                    return index == this.selectedElementIndexData
-                        ? (this.preSelectionField != "" && index == 0 ) 
-                            ? '' 
-                            : 'selected' 
-                        : ''
+                    return index === this.selectedElementIndexData + (this.preSelectionField != "" ? 1 : 0 ) 
+                    ?  this.preSelectionField != "" && index == 0
+                        ? ''
+                        : 'selected' 
+                    : ''
                 }
             },
             getElementList() {
                 return this.preSelectionField != "" ?  [this.preSelectionField, ...this.elementsList]: this.elementsList
             },
             isCloseDisplay(){
-                console.log(this.selectedElementIndexData)
                 return this.preSelectionField != "" 
-                    ? this.selectedElementIndexData > 0
+                    ? this.selectedElementIndexData >= 0
                     : false
             },
             isChevronDisplay(){
                 return this.preSelectionField != "" 
-                        ? this.selectedElementIndexData <= 0
+                        ? this.selectedElementIndexData < 0
                         : true
             }
         },

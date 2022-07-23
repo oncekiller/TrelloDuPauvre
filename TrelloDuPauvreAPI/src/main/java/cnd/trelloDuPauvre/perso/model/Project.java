@@ -64,9 +64,11 @@ public class Project {
     @JoinColumn(name = "workspaceId")
     private Workspace workspace;
 
-    public Project(String name, LocalDateTime creationDate) {
+    public Project(String name, Boolean isFavorite, LocalDateTime creationDate, LocalDateTime lastConsultationDate, String bgColor) {
         this.name = name;
+        this.isFavorite = isFavorite;
         this.creationDate = creationDate;
+        this.lastConsultationDate = lastConsultationDate;
+        this.bgColor = bgColor;
     }
-
 }

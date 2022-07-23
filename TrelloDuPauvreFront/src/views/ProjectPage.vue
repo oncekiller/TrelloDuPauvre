@@ -35,18 +35,25 @@
             <v-row class="storiesRow">
                 <draggable v-model="filteredProjectTicketsData" :disabled="draggableDisabled" group="stories"
                     @end="handleDragStory" item-key="storyId" class="draggable">
-                    <StoryPanel v-for="(projectStory, key) in filteredProjectTicketsData" :key="key"
-                        class="storyPanelCol" :ref="'story' + projectStory.storyId" :style="'width:270px'"
-                        :storyId="projectStory.storyId" :name="projectStory.name" :tickets="projectStory.tickets"
-                        @handleEditTicketAction="handleEditTicket" @handleAddTicketAction="handleAddTicket"
-                        @handleSubMenuClickAction="handleSubMenuClick" @handleUpdateStoryAction="handleUpdateStory"
+                    <StoryPanel v-for="(projectStory, key) in filteredProjectTicketsData" 
+                        :key="key"
+                        class="storyPanelCol" 
+                        :ref="'story' + projectStory.storyId" 
+                        :style="'width:270px'"
+                        :storyId="projectStory.storyId" 
+                        :name="projectStory.name" 
+                        :tickets="projectStory.tickets"
+                        @handleEditTicketAction="handleEditTicket" 
+                        @handleAddTicketAction="handleAddTicket"
+                        @handleSubMenuClickAction="handleSubMenuClick" 
+                        @handleUpdateStoryAction="handleUpdateStory"
                         @handleDragAction="handleDragTicket" />
                 </draggable>
 
                 <div>
                     <button class="addStoryButton" v-if="!editFieldStoryOpen" @click="handleAddStory()">Ajouter une
                         story</button>
-                    <EditField class="editField" ref="editField" :type="variantBlue"
+                    <EditField class="editField" ref="editField" 
                         v-click-outside="() => {this.editFieldStoryOpen = false}" v-if="editFieldStoryOpen"
                         :validationButtonLabel="'Ajouter'" @handleValidationAction="handleValidationEditFieldStory"
                         @handleCloseAction="handleCloseEditFieldStory" />
@@ -98,6 +105,7 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
         },
         async mounted() {
             try {
+                this.setReloadPage(false)
                 this.resetState()
                 await Promise.all([this.getTicketsFromProjectIdMappedByStory(this.selectedProject?.projectId), this.getAllNatures(), this.getAllStatus()])
                 await this.filterProjectTickets()
@@ -233,7 +241,7 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
                         this.subMenuItemId= data.storyId
                         this.subMenuStoryId = -1
                         this.subMenuItemType= "story"
-                        this.subMenuX = subMenuButtonCords.x
+                        this.subMenuX = subMenuButtonCords.x - (window.innerWidth - subMenuButtonCords.x < 150 ? 130 : 0)
                         this.subMenuY = subMenuButtonCords.y + 20
                     }
                     if(data.type == "ticket"){
@@ -241,7 +249,7 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
                         this.subMenuItemId= data.ticketId
                         this.subMenuStoryId = data.storyId
                         this.subMenuItemType= "ticket"
-                        this.subMenuX = subMenuButtonCords.x + 7
+                        this.subMenuX = subMenuButtonCords.x + 7 - (window.innerWidth - subMenuButtonCords.x < 150 ? 130 : 0)
                         this.subMenuY = subMenuButtonCords.y + 25
                     }
                     this.subMenuDisplay = true
@@ -289,9 +297,9 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
             },
             async handleEditSubMenu() {
                 if(this.subMenuItemType == "story"){
-                    this.$refs["story" + this.subMenuItemId][0].textAreaNameOpen = true
+                    this.$refs["story" + this.subMenuItemId][0].textInputNameOpen = true
                     this.$nextTick(() => {
-                        this.$refs["story" + this.subMenuItemId][0].$refs.textAreaName.focus()
+                        this.$refs["story" + this.subMenuItemId][0].$refs.textInputName.focus()
                     })
                 }
                 if(this.subMenuItemType == "ticket"){
@@ -489,7 +497,6 @@ import MoveDropDown from '@/components/MoveDropDown.vue'
                 if(oldStoryId == newStoryId){
                     //Move in the same story
                     if (oldFrontIndex != newFrontIndex) {
-                        console.log(movedTicket, oldStoryId, newStoryId,oldFrontIndex, newFrontIndex)
                         if (oldFrontIndex > newFrontIndex) {
                             for (let index = newFrontIndex; index < oldFrontIndex; index++) {
                                 const updatedTicket = oldStory?.tickets?.find(ticket => ticket.frontIndex == index)

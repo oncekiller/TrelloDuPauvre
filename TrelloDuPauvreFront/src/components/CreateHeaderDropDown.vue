@@ -23,7 +23,7 @@ import { mapMutations, mapState } from 'vuex'
 
 export default {
     props:{
-        elements: {type: [], default: []},
+        elements: {type: Array, default: () => []},
     },
     data() {
         return {

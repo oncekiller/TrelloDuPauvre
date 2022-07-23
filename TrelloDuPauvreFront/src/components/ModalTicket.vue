@@ -1,19 +1,11 @@
 <template>
     <v-dialog fullscreen>
-        <v-container class="modalContainer" >
+        <v-container class="modalContainer">
             <v-row>
                 <v-col class="leftCol" cols="8">
-                    <v-row class="nameSection" >
-                        <textarea
-                            ref="ticketName"
-                            id="ticketName"
-                            type="text" 
-                            placeholder="Ajouter un label..."
-                            :autoResize="true" 
-                            v-model="name" 
-                            rows="1"
-                            class="textArea">
-                        </textarea>
+                    <v-row class="nameSection">
+                        <input ref="ticketName" type="text" id="ticketName" v-model="name"
+                            placeholder="Ajouter un label..." class="textArea" />
                     </v-row>
                     <v-row class="descriptionSection">
                         <v-col>
@@ -22,13 +14,8 @@
                                 Description
                             </v-row>
                             <v-row>
-                                <textarea
-                                    placeholder="Ajouter une description..."
-                                    v-model="description" 
-                                    :autoResize="true" 
-                                    rows="5" 
-                                    class="textArea"
-                                >
+                                <textarea placeholder="Ajouter une description..." v-model="description"
+                                    :autoResize="true" rows="5" class="textArea">
                                 </textarea>
                             </v-row>
                         </v-col>
@@ -47,8 +34,7 @@
                         </v-col>
                     </v-row>
                     <v-row class="checkListSection">
-                        <ModalTicketCheckListSection 
-                            :checkListItems="getCheckListItems"
+                        <ModalTicketCheckListSection :checkListItems="getCheckListItems"
                             @handleDeleteAction="handleDeleteCheckListItem"
                             @handleUpdateCheckAction="handleUpdateCheckCheckListItem"
                             @handleUpdateLabelAction="handleUpdateLabelCheckListItem"
@@ -56,52 +42,46 @@
                     </v-row>
                 </v-col>
                 <v-col class="rightCol">
-                    <v-row class="statusSection">
-                        <span class="header">Status</span>
-                        <ActionButtonDropList 
-                            justify="left"
-                            :width="150" 
-                            :elementsList="getElementsListStatus"
-                            :selectedElementIndex="getStatusIndex" 
-                            @handleSelectionAction="handleUpdateStatus" />
-                    </v-row>
-                    <v-row class="natureSection">
-                        <span class="header">Nature</span>
-                        <ActionButtonDropList 
-                            :width="150" 
-                            :elementsList="getElementsListNature"
-                            :selectedElementIndex="getNatureIndex" 
-                            @handleSelectionAction="handleUpdateNature" />
-                    </v-row>
-                    <v-row class="creationDateSection">
-                         <v-col>
-                            <v-row class="header">Date de création</v-row>
-                            <v-row>{{ getCreationDate }}</v-row>
-                        </v-col>
-                    </v-row>
-                    <v-row class="modificationDateSection">
-                        <v-col>
-                            <v-row class="header">Date de modification</v-row>
-                            <v-row>{{ getModificationDate }}</v-row>
-                        </v-col>
-                    </v-row>
-                    <v-row class="deadLineSection">
-                        <v-col>
-                            <v-row class="header">Date d'échéance</v-row>
-                            <v-row>
-                                <Datepicker 
-                                        style="cursor: pointer !important"
-                                        class="datePicker"
-                                        v-model="deadLine" 
-                                        inputFormat="yyyy-MM-dd"
-                                    >
-                                </Datepicker>
-                                <v-icon class="datePickerIcon">mdi-text-box-check-outline</v-icon>
-                            </v-row>
-                        </v-col>
-                    </v-row>
+                    <div class="propertySection">
+                        <v-row class="statusSection">
+                            <span class="header">Status</span>
+                            <ActionButtonDropList justify="left" :width="150" :elementsList="getElementsListStatus"
+                                :selectedElementIndex="getStatusIndex" @handleSelectionAction="handleUpdateStatus" />
+                        </v-row>
+                        <v-row class="natureSection">
+                            <span class="header">Nature</span>
+                            <ActionButtonDropList :width="150" :elementsList="getElementsListNature"
+                                :selectedElementIndex="getNatureIndex" @handleSelectionAction="handleUpdateNature" />
+                        </v-row>
+
+                    </div>
+                    <div class="dateSection">
+                        <v-row class="deadLineSection">
+                            <v-col>
+                                <v-row class="header">Date d'échéance</v-row>
+                                <v-row>
+                                    <Datepicker style="cursor: pointer !important" class="datePicker" v-model="deadLine"
+                                        inputFormat="yyyy-MM-dd">
+                                    </Datepicker>
+                                    <v-icon class="datePickerIcon">mdi-text-box-check-outline</v-icon>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                        <v-row class="creationDateSection">
+                            <v-col>
+                                <v-row class="header">Date de création</v-row>
+                                <v-row>{{ getCreationDate }}</v-row>
+                            </v-col>
+                        </v-row>
+                        <v-row class="modificationDateSection">
+                            <v-col>
+                                <v-row class="header">Date de modification</v-row>
+                                <v-row>{{ getModificationDate }}</v-row>
+                            </v-col>
+                        </v-row>
+                    </div>
                 </v-col>
-                 <v-icon class="closeButton" @click="handleClose()">mdi-close</v-icon> 
+                <v-icon class="closeButton" @click="handleClose()">mdi-close</v-icon>
             </v-row>
             <v-row class="footerSection" justify="center">
                 <button :disabled="isSaveDisabled" @click="handleSave()">Sauvegarder</button>
@@ -265,6 +245,7 @@ export default {
 </script>
 
 <style scoped>
+
 .modalContainer {
     margin-top: 3%;
     border-radius: 10px;
@@ -377,6 +358,7 @@ export default {
 .modalContainer .rightCol .deadLineSection .datePickerIcon {
     margin-left:-30px; 
     pointer-events: none;
+    margin-bottom: 30px;
 }
 
 .modalContainer .footerSection {
@@ -418,12 +400,48 @@ export default {
 }
 
 @media screen and (max-width: 750px){
-    .leftCol {
-        max-width: 100%;
-        flex: 0 0 100%;
-        margin-right: 0 !important;
-        padding-right: 30px !important;
+    .modalContainer {
+        padding: 25px;
     }
+        .modalContainer .leftCol {
+            max-width: 100%;
+            flex: 0 0 100%;
+            margin-right: 0 !important;
+            margin-right: 0px;
+            padding-left: 0px;
+        }
+        .modalContainer .nameSection {
+            margin-top: 20px;
+        }
+            .modalContainer .leftCol .textArea { 
+                margin-left: 0;
+            }
+                .modalContainer .leftCol .prioritySection .slider {
+                    margin-left: 0;
+                }
+        .modalContainer .rightCol {
+            margin-top: 20px;
+            margin-left: 0;
+            display: flex;
+        }
+            .modalContainer .rightCol .propertySection{
+                width: 50%;
+            }
+            .modalContainer .rightCol .dateSection .modificationDateSection{
+                margin-bottom: 10px;
+            }
 }
+@media screen and (max-width: 500px){ 
+    .modalContainer .rightCol {
+        display: block;
+    }
+        .modalContainer .rightCol .propertySection {
+            width: 100%;
+        }
+        .modalContainer .rightCol .dateSection {
+            margin-top: -20px;
+        }
+}
+
 
 </style>

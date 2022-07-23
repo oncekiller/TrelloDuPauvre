@@ -21,7 +21,6 @@ export default {
     },
     methods: {
         handleSelect(icon){
-            console.log(icon)
             this.$emit("handleSelectAction", icon)
         }
     },
@@ -36,7 +35,6 @@ export default {
                 .filter(icon => {
                     return icon != undefined
                 })
-            console.log(filtered)
             return filtered
         }
     }

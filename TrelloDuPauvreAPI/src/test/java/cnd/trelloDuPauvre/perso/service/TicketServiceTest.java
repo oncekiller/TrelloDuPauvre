@@ -54,7 +54,8 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
 
         Ticket ticket2 = new Ticket(
@@ -63,7 +64,8 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
 
         ArrayList<Ticket> tickets = new ArrayList<>();
@@ -88,7 +90,8 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
         int id = new Random().nextInt(100);
 
@@ -126,10 +129,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -195,10 +205,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -232,10 +249,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -271,10 +295,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -312,10 +343,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -355,10 +393,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -429,7 +474,8 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
         int id = new Random().nextInt(100);
 
@@ -449,10 +495,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -489,10 +542,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -530,10 +590,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -573,10 +640,17 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
-        Project project = new Project("name");
-        Story story = new Story("name");
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
         Status status = new Status("name", "label");
         Nature nature = new Nature("name", "label");
         int storyId = new Random().nextInt(100);
@@ -617,7 +691,8 @@ public class TicketServiceTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
         int id = new Random().nextInt(100);
 

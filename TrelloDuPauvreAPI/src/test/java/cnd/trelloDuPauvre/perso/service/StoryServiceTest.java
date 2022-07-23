@@ -12,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -37,8 +38,8 @@ public class StoryServiceTest {
     @Test
     void can_call_getAllStory() {
         //given
-        Story story1 = new Story("name");
-        Story story2 = new Story("name");
+        Story story1 = new Story("name", LocalDateTime.now());
+        Story story2 = new Story("name", LocalDateTime.now());
         ArrayList<Story> stories = new ArrayList<>();
         stories.add(story1);
         stories.add(story2);
@@ -54,7 +55,7 @@ public class StoryServiceTest {
     void can_call_getStoryById_with_validId() {
         //given
         int id = new Random().nextInt(100);
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         //when
         when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
         Story result = underTest.getStoryById(id);
@@ -81,9 +82,13 @@ public class StoryServiceTest {
     @Test
     void can_call_createStory() {
         //given
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         Project project = new Project(
-                "name"
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
         );
         story.setProject(project);
 
@@ -111,9 +116,13 @@ public class StoryServiceTest {
     @Test
     void createStory_with_notExistingProjectId_shouldThrow_NotFoundException() {
         //given
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         Project project = new Project(
-                "name"
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
         );
         story.setProject(project);
 
@@ -130,9 +139,13 @@ public class StoryServiceTest {
     @Test
     void can_call_updateStory_with_validId() {
         //given
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         Project project = new Project(
-                "name"
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
         );
         story.setProject(project);
 
@@ -167,7 +180,7 @@ public class StoryServiceTest {
     void updateStory_with_notExistingId_shouldThrow_NotFoundException(){
         //given
         int id = new Random().nextInt(100);
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         //when
         //then
         assertThatThrownBy(() -> underTest.updateStory(id, story))
@@ -178,9 +191,13 @@ public class StoryServiceTest {
     @Test
     void updateStory_with_notExistingProjectId_shouldThrow_NotFoundException(){
         //given
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         Project project = new Project(
-                "name"
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
         );
         story.setProject(project);
 
@@ -199,7 +216,7 @@ public class StoryServiceTest {
     void can_call_deleteStory_with_validId_should_return_true() {
         //given
         int id = new Random().nextInt(100);
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
         //when
         when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
         Boolean result = underTest.deleteStory(id);

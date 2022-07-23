@@ -116,7 +116,7 @@ export default {
             
             //Delete Update or Create CheckListItems
             await Promise.all([
-                state.selectedTicket?.checkListItems.map(async (checkListItem) => {
+                await state.selectedTicket?.checkListItems.map(async (checkListItem) => {
                     const newCheckListItem = {
                         checkListItemId: checkListItem.checkListItemId,
                         label: checkListItem.label,

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class ImageController {
     @Autowired
     private ImageService imageService;

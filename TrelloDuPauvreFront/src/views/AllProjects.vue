@@ -182,6 +182,7 @@
         },
         async mounted() {
             try {
+                this.setReloadPage(false)
                 await this.getAllProjects()
                 await this.getAllWorkspaces()
                 this.setAllProjects(await Promise.all(this.allProjects.map(async (project) => {
@@ -202,7 +203,6 @@
             ...mapMutations("commonStore", ["setReloadPage"]),
             ...mapMutations("projectStore", [ "setSelectedProject", "setAllProjects"]),
             handleSelectProject(project) {
-                console.log(project)
                 this.setSelectedProject(project)
                 this.$router.push("projectPage")
             },
@@ -266,7 +266,7 @@
                 if(!this.subMenuDisplay){
                     const subMenuButtonCords = this.$refs[refBasedName + "Project" + projectId]?.[0]?.$refs["subMenuButton"]?.$el?.getBoundingClientRect()
                     this.subMenuItemId= projectId
-                    this.subMenuX = subMenuButtonCords.x
+                    this.subMenuX = subMenuButtonCords.x - (window.innerWidth - subMenuButtonCords.x < 150 ? 130 : 0)
                     this.subMenuY = subMenuButtonCords.y + 20
                 }
                 this.subMenuDisplay = true

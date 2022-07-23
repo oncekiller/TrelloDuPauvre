@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -40,8 +41,8 @@ class StoryControllerTest {
     @Test
     void can_call_getAllStory() throws Exception {
         //given
-        Story story1 = new Story("name1");
-        Story story2 = new Story("name2");
+        Story story1 = new Story("name1", LocalDateTime.now());
+        Story story2 = new Story("name2", LocalDateTime.now());
         ArrayList<Story> stories = new ArrayList<>();
         stories.add(story1);
         stories.add(story2);
@@ -63,7 +64,7 @@ class StoryControllerTest {
     void can_call_getStoryById_with_validId() throws Exception {
         //given
         int id = new Random().nextInt(100);
-        Story story = new Story("name");
+        Story story = new Story("name", LocalDateTime.now());
 
         //when
         when(storyService.getStoryById(any(int.class))).thenReturn(story);
@@ -98,8 +99,14 @@ class StoryControllerTest {
     @Test
     void can_call_createStory() throws Exception {
         //given
-        Story story = new Story("name");
-        Project project = new Project("name");
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         story.setProject(project);
 
         //when
@@ -122,8 +129,14 @@ class StoryControllerTest {
     @Test
     void can_call_updateStory_with_validId() throws Exception {
         //given
-        Story story = new Story("name");
-        Project project = new Project("name");
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         story.setProject(project);
         int id = new Random().nextInt(100);
         //when
@@ -152,8 +165,14 @@ class StoryControllerTest {
         //given
         int id = new Random().nextInt(100);
         String errorMessage = "Story with id " + id + " not found";
-        Story story = new Story("name");
-        Project project = new Project("name");
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
         story.setProject(project);
         //when
         when(storyService.updateStory(any(int.class), any(Story.class))).thenThrow(new EntityNotFoundException(errorMessage));

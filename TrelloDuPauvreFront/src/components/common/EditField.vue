@@ -24,7 +24,7 @@
 <script>
     export default {
         props: {
-            type: {type: String, default: "variantYellow"},
+            type: {type: String, default: "variantBlue"},
             validationButtonLabel: {type: String,  default: "Modifier"},
             fieldValue: {type: String, default: ""},
             width: {type: Number, default: 350},
@@ -59,6 +59,7 @@
         padding: 7px;
         height: 88px;
         font-size: 16px;
+        max-width: 100% ;
     }
 
     .editField .validationButton{
@@ -95,24 +96,18 @@
         outline: #D9EBF1 solid 2px !important;
     }
 
-    .editField.variantYellow{
+    .editField.variantBlue{
         background-color: #EFEFEF;
         border-radius: 10px;
         color: #000;
     }
 
-    .editField.variantYellow .validationButton{
+    .editField.variantBlue .validationButton{
         background-color: #FFDC84;
         color: #fff
     }
 
-    .editField.variantBlue{
-        background-color: #EFEFEF;
-        border-radius: 10px;
-        color: #fff;
-    }
-
-    .editField.variantYellow .validationButton{
+    .editField.variantBlue .validationButton{
         background-color: #409DBB;
         color: #000
     }

@@ -22,7 +22,7 @@ async function request(axiosMethod, url, body) {
     response = await axiosMethod(url, body )
   } catch (error) {
     store.commit("commonStore/setAlertDisplay", true)
-    return
+    throw error
   }
   if (response.status == 204) {
     return response

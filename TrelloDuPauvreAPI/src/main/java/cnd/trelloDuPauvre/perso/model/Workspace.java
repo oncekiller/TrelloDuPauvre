@@ -40,4 +40,9 @@ public class Workspace {
     @JsonIgnore
     private Set<Project> projects = new HashSet<>();
 
+    public Workspace(String name, String iconName, LocalDateTime creationDate) {
+        this.name = name;
+        this.iconName = iconName;
+        this.creationDate = creationDate;
+    }
 }

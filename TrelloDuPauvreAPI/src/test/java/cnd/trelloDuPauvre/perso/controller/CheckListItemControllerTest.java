@@ -108,7 +108,8 @@ class CheckListItemControllerTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
         CheckListItem checkListItem = new CheckListItem("label", true);
         checkListItem.setTicket(ticket);
@@ -140,7 +141,8 @@ class CheckListItemControllerTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
         checkListItem.setTicket(ticket);
         int id = new Random().nextInt(100);
@@ -178,7 +180,8 @@ class CheckListItemControllerTest {
                 new Random().nextInt(100),
                 LocalDate.now(),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new Random().nextInt(100)
         );
         checkListItem.setTicket(ticket);
 

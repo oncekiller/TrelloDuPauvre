@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,6 +47,12 @@ public class Image{
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
 
+    public Image(String fileName, String fileType, long size, byte[] data) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.size = size;
+        this.data = data;
+    }
 
     /**
      * Create new Image class.
