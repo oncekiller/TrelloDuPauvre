@@ -1,7 +1,9 @@
 package cnd.trelloDuPauvre.perso.service;
 
 import cnd.trelloDuPauvre.perso.Exceptions.EntityNotFoundException;
+import cnd.trelloDuPauvre.perso.model.Image;
 import cnd.trelloDuPauvre.perso.model.Project;
+import cnd.trelloDuPauvre.perso.model.Workspace;
 import cnd.trelloDuPauvre.perso.repository.ImageRepository;
 import cnd.trelloDuPauvre.perso.repository.ProjectRepository;
 import cnd.trelloDuPauvre.perso.repository.WorkspaceRepository;
@@ -134,6 +136,25 @@ public class ProjectServiceTest {
                 "#fff"
         );
         int id = new Random().nextInt(100);
+        int imageId = new Random().nextInt(100);
+        int workspaceId = new Random().nextInt(100);
+        Image image = new Image(
+                "fileName",
+                "fileType",
+                new Random().nextLong(),
+                new byte[new Random().nextInt(100)]
+        );
+        Workspace workspace = new Workspace(
+                "name",
+                "iconName",
+                LocalDateTime.now()
+        );
+        project.setBgImage(image);
+        project.setWorkspace(workspace);
+
+        project.getBgImage().setImageId(imageId);
+        project.getWorkspace().setWorkspaceId(workspaceId);
+
         //when
         when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
         when(projectRepository.save(any(Project.class))).thenReturn(project);
@@ -168,6 +189,68 @@ public class ProjectServiceTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Project with id " + id + " not found");
     }
+
+    @Test
+    void can_call_updateProjectFavorite_with_validId() {
+        //given
+        Project project = new Project(
+                "name",
+                null,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        int id = new Random().nextInt(100);
+        int imageId = new Random().nextInt(100);
+        int workspaceId = new Random().nextInt(100);
+        boolean isFavorite = new Random().nextBoolean();
+        Image image = new Image(
+                "fileName",
+                "fileType",
+                new Random().nextLong(),
+                new byte[new Random().nextInt(100)]
+        );
+        Workspace workspace = new Workspace(
+                "name",
+                "iconName",
+                LocalDateTime.now()
+        );
+        project.setBgImage(image);
+        project.setWorkspace(workspace);
+        project.setIsFavorite(isFavorite);
+
+        project.getBgImage().setImageId(imageId);
+        project.getWorkspace().setWorkspaceId(workspaceId);
+
+        //when
+        when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
+        Project result = underTest.updateProjectFavorite(id, isFavorite);
+        //then
+        ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Project> projectCaptor = ArgumentCaptor.forClass(Project.class);
+        verify(projectRepository).findById(idCaptor.capture());
+        verify(projectRepository).save(projectCaptor.capture());
+
+        int capturedId = idCaptor.getValue();
+        Project capturedProject = projectCaptor.getValue();
+        assertThat(capturedId).isEqualTo(id);
+        assertThat(capturedProject).isEqualTo(project);
+        assertThat(result).isEqualTo(project);
+    }
+
+    @Test
+    void updateProjectFavorite_with_notExistingId_shouldThrow_NotFoundException(){
+        //given
+        int id = new Random().nextInt(100);
+        boolean isFavorite = new Random().nextBoolean();
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.updateProjectFavorite(id, isFavorite))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Project with id " + id + " not found");
+    }
+
 
     @Test
     void can_call_deleteProject_with_validId_should_return_true() {

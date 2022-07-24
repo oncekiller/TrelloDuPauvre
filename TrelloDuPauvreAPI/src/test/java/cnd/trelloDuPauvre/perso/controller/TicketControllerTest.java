@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -129,6 +131,107 @@ class TicketControllerTest {
 
         //then
         mockMvc.perform(get("/api/v1/tickets/" + id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is(errorMessage)));
+    }
+
+    @Test
+    void can_call_getTicketsByStoryId_with_validId() throws Exception {
+        //given
+        int id = new Random().nextInt(100);
+        Ticket ticket = new Ticket(
+                "name",
+                "description",
+                new Random().nextInt(100),
+                LocalDate.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new Random().nextInt(100)
+        );
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        tickets.add(ticket);
+        //when
+        when(ticketService.getTicketsByStoryId(any(int.class))).thenReturn(tickets);
+
+        //then
+        mockMvc.perform(get("/api/v1/story/" + id + "/tickets"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is(ticket.getName())))
+                .andExpect(jsonPath("$[0].description", is(ticket.getDescription())))
+                .andExpect(jsonPath("$[0].creationDate", is(ticket.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))))
+                .andExpect(jsonPath("$[0].deadLine", is(ticket.getDeadLine().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))))
+                .andExpect(jsonPath("$[0].priority", is(ticket.getPriority())))
+                .andExpect(jsonPath("$[0].modificationDate", is(ticket.getModificationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
+
+        ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(ticketService, times(1)).getTicketsByStoryId(idCaptor.capture());
+
+        int capturedId = idCaptor.getValue();
+        assertThat(capturedId).isEqualTo(id);
+    }
+
+    @Test
+    void getTicketsByStoryId_with_notExistingId_shouldThrow_NotFoundException() throws Exception {
+        //given
+        int id = new Random().nextInt(100);
+        String errorMessage = "Story with id " + id + " not found";
+
+        //when
+        when(ticketService.getTicketsByStoryId(any(int.class))).thenThrow(new EntityNotFoundException(errorMessage));
+
+        //then
+        mockMvc.perform(get("/api/v1/story/" + id + "/tickets"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is(errorMessage)));
+    }
+
+    @Test
+    void can_call_getTicketsByProjectIdGroupByStory_with_validId() throws Exception {
+        //given
+        int id = new Random().nextInt(100);
+        int storyId = new Random().nextInt(100);
+        Ticket ticket = new Ticket(
+                "name",
+                "description",
+                new Random().nextInt(100),
+                LocalDate.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new Random().nextInt(100)
+        );
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        tickets.add(ticket);
+        //when
+        when(ticketService.getTicketsByProjectIdGroupByStory(any(int.class))).thenReturn((List<Object>) tickets.clone());
+
+        //then
+        mockMvc.perform(get("/api/v1/project/" + id + "/tickets"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is(ticket.getName())))
+                .andExpect(jsonPath("$[0].description", is(ticket.getDescription())))
+                .andExpect(jsonPath("$[0].creationDate", is(ticket.getCreationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))))
+                .andExpect(jsonPath("$[0].deadLine", is(ticket.getDeadLine().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))))
+                .andExpect(jsonPath("$[0].priority", is(ticket.getPriority())))
+                .andExpect(jsonPath("$[0].modificationDate", is(ticket.getModificationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
+
+        ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(ticketService, times(1)).getTicketsByProjectIdGroupByStory(idCaptor.capture());
+
+        int capturedId = idCaptor.getValue();
+        assertThat(capturedId).isEqualTo(id);
+    }
+
+    @Test
+    void getTicketsByProjectIdGroupByStory_with_notExistingId_shouldThrow_NotFoundException() throws Exception {
+        //given
+        int id = new Random().nextInt(100);
+        String errorMessage = "Project with id " + id + " not found";
+
+        //when
+        when(ticketService.getTicketsByProjectIdGroupByStory(any(int.class))).thenThrow(new EntityNotFoundException(errorMessage));
+
+        //then
+        mockMvc.perform(get("/api/v1/project/" + id + "/tickets"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is(errorMessage)));
     }
@@ -304,6 +407,167 @@ class TicketControllerTest {
         //then
         mockMvc.perform(put("/api/v1/tickets/" + id)
                         .content(testUtil.asJsonString(ticket))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is(errorMessage)));
+    }
+
+    @Test
+    void can_call_updateMultipleTickets_with_validId() throws Exception {
+        //given
+        int id1 = new Random().nextInt(100);
+        int id2 = new Random().nextInt(100);
+        Ticket ticket1 = new Ticket(
+                "name1",
+                "description1",
+                new Random().nextInt(100),
+                LocalDate.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new Random().nextInt(100)
+        );
+        Ticket ticket2 = new Ticket(
+                "name2",
+                "description2",
+                new Random().nextInt(100),
+                LocalDate.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new Random().nextInt(100)
+        );
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
+        Status status = new Status("name", "label");
+        Nature nature = new Nature("name", "label");
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        int statusId = new Random().nextInt(100);
+        int natureId = new Random().nextInt(100);
+
+        ticket1.setTicketId(id1);
+        ticket1.setStatus(status);
+        ticket1.setNature(nature);
+        ticket1.setProject(project);
+        ticket1.setStory(story);
+
+        ticket1.getStatus().setStatusId(statusId);
+        ticket1.getNature().setNatureId(natureId);
+        ticket1.getProject().setProjectId(projectId);
+        ticket1.getStory().setStoryId(storyId);
+
+        ticket2.setTicketId(id2);
+        ticket2.setStatus(status);
+        ticket2.setNature(nature);
+        ticket2.setProject(project);
+        ticket2.setStory(story);
+
+        ticket2.getStatus().setStatusId(statusId);
+        ticket2.getNature().setNatureId(natureId);
+        ticket2.getProject().setProjectId(projectId);
+        ticket2.getStory().setStoryId(storyId);
+
+
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        tickets.add(ticket1);
+        tickets.add(ticket2);
+        //when
+        when(ticketService.updateMultipleTickets(any(ArrayList.class))).thenReturn(tickets);
+
+        //then
+        mockMvc.perform(put("/api/v1/tickets/multiple")
+                        .content(testUtil.asJsonString(tickets))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        ArgumentCaptor<ArrayList> listCaptor = ArgumentCaptor.forClass(ArrayList.class);
+        verify(ticketService, times(1)).updateMultipleTickets(listCaptor.capture());
+
+        ArrayList<Ticket> capturedList = listCaptor.getValue();
+
+        assertThat(capturedList.get(0).getTicketId()).isEqualTo(tickets.get(0).getTicketId());
+        assertThat(capturedList.get(1).getTicketId()).isEqualTo(tickets.get(1).getTicketId());
+    }
+
+    @Test
+    void updateMultipleTickets_with_notExistingId_shouldThrow_NotFoundException() throws Exception {
+        //given
+        int id1 = new Random().nextInt(100);
+        int id2 = new Random().nextInt(100);
+        String errorMessage = "Ticket with id " + id1 + " not found";
+        Ticket ticket1 = new Ticket(
+                "name1",
+                "description1",
+                new Random().nextInt(100),
+                LocalDate.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new Random().nextInt(100)
+        );
+        Ticket ticket2 = new Ticket(
+                "name2",
+                "description2",
+                new Random().nextInt(100),
+                LocalDate.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new Random().nextInt(100)
+        );
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        Story story = new Story("name", LocalDateTime.now());
+        Status status = new Status("name", "label");
+        Nature nature = new Nature("name", "label");
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        int statusId = new Random().nextInt(100);
+        int natureId = new Random().nextInt(100);
+
+        ticket1.setTicketId(id1);
+        ticket1.setStatus(status);
+        ticket1.setNature(nature);
+        ticket1.setProject(project);
+        ticket1.setStory(story);
+
+        ticket1.getStatus().setStatusId(statusId);
+        ticket1.getNature().setNatureId(natureId);
+        ticket1.getProject().setProjectId(projectId);
+        ticket1.getStory().setStoryId(storyId);
+
+        ticket2.setTicketId(id2);
+        ticket2.setStatus(status);
+        ticket2.setNature(nature);
+        ticket2.setProject(project);
+        ticket2.setStory(story);
+
+        ticket2.getStatus().setStatusId(statusId);
+        ticket2.getNature().setNatureId(natureId);
+        ticket2.getProject().setProjectId(projectId);
+        ticket2.getStory().setStoryId(storyId);
+
+
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        tickets.add(ticket1);
+        tickets.add(ticket2);
+
+        //when
+        when(ticketService.updateMultipleTickets(any(ArrayList.class))).thenThrow(new EntityNotFoundException(errorMessage));
+        //then
+        mockMvc.perform(put("/api/v1/tickets/multiple")
+                        .content(testUtil.asJsonString(tickets))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())

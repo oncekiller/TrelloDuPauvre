@@ -70,10 +70,11 @@ public class TicketService {
                 subResult.put("tickets", storyTickets);
                 result.add(subResult);
             }
+        }else {
+            throw new EntityNotFoundException("Project with id " + projectId + " not found");
         }
         return  result;
     }
-
     public Ticket createTicket (Ticket ticket) {
         int projectId = ticket.getProject().getProjectId();
         Optional<Project> project = projectRepository.findById(projectId);
@@ -113,7 +114,6 @@ public class TicketService {
             throw new EntityNotFoundException("Project with id " + projectId + " not found");
         }
     }
-
     public Ticket updateTicket (Ticket ticket, int ticketId) {
         Optional<Ticket> updatedTicket = ticketRepository.findById(ticketId);
 
@@ -169,27 +169,21 @@ public class TicketService {
             throw new EntityNotFoundException("Ticket with id " + ticketId + " not found");
         }
     }
-
     public List<Ticket> updateMultipleTickets(List<Ticket> tickets){
         ArrayList<Ticket> updatedTickets = new ArrayList<Ticket>();
         for (Ticket ticket : tickets) {
             int ticketId = ticket.getTicketId();
             Optional<Ticket> updatedTicket = ticketRepository.findById(ticketId);
-
             //Check if the updated ticket exist
             if(updatedTicket.isPresent()) {
                 int projectId = ticket.getProject().getProjectId();
                 Optional<Project> project = projectRepository.findById(projectId);
-
                 int storyId = ticket.getStory().getStoryId();
                 Optional<Story> story = storyRepository.findById(storyId);
-
                 int natureId = ticket.getNature().getNatureId();
                 Optional<Nature> nature = natureRepository.findById(natureId);
-
                 int statusId = ticket.getStatus().getStatusId();
                 Optional<Status> status = statusRepository.findById(statusId);
-
                 //Check if project of the updated ticket exist
                 if(project.isPresent()){
                     //Check if story of the updated ticket exist
@@ -210,7 +204,6 @@ public class TicketService {
                                 newTicket.setNature(nature.get());
                                 newTicket.setStatus(status.get());
                                 newTicket.setFrontIndex(ticket.getFrontIndex());
-
                                 updatedTickets.add(newTicket);
                             }else {
                                 throw new EntityNotFoundException("Status with id " + statusId + " not found");
@@ -227,13 +220,11 @@ public class TicketService {
             }else {
                 throw new EntityNotFoundException("Ticket with id " + ticketId + " not found");
             }
-
         }
         return ticketRepository.saveAll(updatedTickets);
     }
     public Boolean deleteTicket(int ticketId) {
         Optional<Ticket> deletedTicket = ticketRepository.findById(ticketId);
-
         if(deletedTicket.isPresent()) {
             ticketRepository.deleteById(ticketId);
             return true;

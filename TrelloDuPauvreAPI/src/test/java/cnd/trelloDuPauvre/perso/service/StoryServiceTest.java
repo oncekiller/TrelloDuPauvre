@@ -80,6 +80,49 @@ public class StoryServiceTest {
     }
 
     @Test
+    void can_call_getStoriesByProjectId_with_validId() {
+        //given
+        int id = new Random().nextInt(100);
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        story.setProject(project);
+        ArrayList<Story> stories = new ArrayList<>();
+        stories.add(story);
+        //when
+        when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
+        when(storyRepository.findByProject(any(Project.class))).thenReturn(stories);
+        List<Story> result = underTest.getStoriesByProjectId(id);
+        //then
+        ArgumentCaptor<Integer> idCaptor = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Project> projectCaptor = ArgumentCaptor.forClass(Project.class);
+        verify(projectRepository).findById(idCaptor.capture());
+        verify(storyRepository).findByProject(projectCaptor.capture());
+
+        int capturedId = idCaptor.getValue();
+        Project capturedProject = projectCaptor.getValue();
+        assertThat(capturedId).isEqualTo(id);
+        assertThat(capturedProject).isEqualTo(project);
+        assertThat(result).isEqualTo(stories);
+    }
+
+    @Test
+    void getStoriesByProjectId_with_notExistingId_shouldThrow_NotFoundException() {
+        //given
+        int id = new Random().nextInt(100);
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.getStoriesByProjectId(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Project with id " + id + " not found");
+    }
+
+    @Test
     void can_call_createStory() {
         //given
         Story story = new Story("name", LocalDateTime.now());
@@ -208,6 +251,181 @@ public class StoryServiceTest {
         when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
         //then
         assertThatThrownBy(() -> underTest.updateStory(storyId, story))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Project with id " + projectId + " not found");
+    }
+
+    @Test
+    void can_call_updateMultipleStories_with_validId(){
+        //given
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        story.setProject(project);
+
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        story.setStoryId(storyId);
+        story.getProject().setProjectId(projectId);
+
+        ArrayList<Story> stories = new ArrayList<>();
+        stories.add(story);
+
+        //when
+        when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(project));
+        when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
+        when(storyRepository.saveAll(any(ArrayList.class))).thenReturn(stories);
+        List<Story> result = underTest.updateMultipleStories(stories);
+        //then
+        ArgumentCaptor<Integer> projectIdCaptor = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> storyIdCaptor = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<ArrayList<Story>> listStoryCaptor = ArgumentCaptor.forClass(ArrayList.class);
+        verify(projectRepository).findById(projectIdCaptor.capture());
+        verify(storyRepository).findById(storyIdCaptor.capture());
+        verify(storyRepository).saveAll(listStoryCaptor.capture());
+
+        int capturedProjectId = projectIdCaptor.getValue();
+        int capturedStoryId = storyIdCaptor.getValue();
+        ArrayList<Story> capturedlistStory = listStoryCaptor.getValue();
+
+        assertThat(capturedProjectId).isEqualTo(projectId);
+        assertThat(capturedStoryId).isEqualTo(storyId);
+        assertThat(capturedlistStory).isEqualTo(stories);
+        assertThat(result).isEqualTo(stories);
+    }
+
+    @Test
+    void updateMultipleStories_with_notExistingId_shouldThrow_NotFoundException(){
+        //given
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        story.setProject(project);
+
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        story.setStoryId(storyId);
+        story.getProject().setProjectId(projectId);
+
+        ArrayList<Story> stories = new ArrayList<>();
+        stories.add(story);
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.updateMultipleStories(stories))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Story with id " + storyId + " not found");
+    }
+
+    @Test
+    void updateMultipleStories_with_notExistingProjectId_shouldThrow_NotFoundException(){
+        //given
+        Story story = new Story("name", LocalDateTime.now());
+        Project project = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+        story.setProject(project);
+
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        story.setStoryId(storyId);
+        story.getProject().setProjectId(projectId);
+
+        ArrayList<Story> stories = new ArrayList<>();
+        stories.add(story);
+
+        //when
+        when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
+        //then
+        assertThatThrownBy(() -> underTest.updateMultipleStories(stories))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Project with id " + projectId + " not found");
+    }
+
+
+    @Test
+    void can_call_moveStory_with_validId() {
+        //given
+        Story story = new Story("name", LocalDateTime.now());
+        Project newProject = new Project(
+                "name",
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "#fff"
+        );
+
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        int frontIndex = new Random().nextInt(100);
+        newProject.setProjectId(projectId);
+        Story newStory = new Story("name", LocalDateTime.now());
+        newStory.setProject(newProject);
+        newStory.setFrontIndex(frontIndex);
+
+
+
+        //when
+        when(projectRepository.findById(any(int.class))).thenReturn(Optional.of(newProject));
+        when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
+        when(storyRepository.save(any(Story.class))).thenReturn(newStory);
+        Story result = underTest.moveStory(storyId, projectId, frontIndex);
+        //then
+        ArgumentCaptor<Integer> projectIdCaptor = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> storyIdCaptor = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Story> storyCaptor = ArgumentCaptor.forClass(Story.class);
+        verify(projectRepository).findById(projectIdCaptor.capture());
+        verify(storyRepository).findById(storyIdCaptor.capture());
+        verify(storyRepository).save(storyCaptor.capture());
+
+        int capturedProjectId = projectIdCaptor.getValue();
+        int capturedStoryId = storyIdCaptor.getValue();
+        Story capturedStory = storyCaptor.getValue();
+
+        assertThat(capturedProjectId).isEqualTo(projectId);
+        assertThat(capturedStoryId).isEqualTo(storyId);
+        assertThat(capturedStory).isEqualTo(story);
+        assertThat(result).isEqualTo(newStory);
+    }
+
+    @Test
+    void moveStory_with_notExistingId_shouldThrow_NotFoundException(){
+        //given
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        int frontIndex = new Random().nextInt(100);
+        Story story = new Story("name", LocalDateTime.now());
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.moveStory(storyId, projectId, frontIndex))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Story with id " + storyId + " not found");
+    }
+
+    @Test
+    void moveStory_with_notExistingProjectId_shouldThrow_NotFoundException(){
+        //given
+        int storyId = new Random().nextInt(100);
+        int projectId = new Random().nextInt(100);
+        int frontIndex = new Random().nextInt(100);
+        Story story = new Story("name", LocalDateTime.now());
+        //when
+        when(storyRepository.findById(any(int.class))).thenReturn(Optional.of(story));
+        //then
+        assertThatThrownBy(() -> underTest.moveStory(storyId, projectId, frontIndex))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Project with id " + projectId + " not found");
     }

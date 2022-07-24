@@ -214,7 +214,7 @@ class WorkspaceControllerTest {
     }
 
     @Test
-    void deleteNature_with_notExistingId_should_return_false() throws Exception {
+    void deleteWorkspace_with_notExistingId_should_return_false() throws Exception {
         //given
         int id = new Random().nextInt(100);
 
