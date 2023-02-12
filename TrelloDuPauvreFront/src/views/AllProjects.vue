@@ -181,6 +181,9 @@
             }
         },
         async mounted() {
+            window.setInterval(async () => {
+                await this.doClock()
+            }, 5000);
             try {
                 this.setReloadPage(false)
                 await this.getAllProjects()
@@ -197,6 +200,30 @@
             }
         },
         methods: {
+            async doClock(){
+                await Promise.all([
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                    await this.getAllWorkspaces(),
+                ])
+            },
             ...mapActions("projectStore", ["getAllProjects", "deleteProjectById", "updateProjectFavorite"]),
             ...mapActions("imageStore", ["createImage", "getImageById"]),
             ...mapActions("workspaceStore", ["getAllWorkspaces", "deleteWorkspaceById"]),

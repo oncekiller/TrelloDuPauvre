@@ -12,6 +12,13 @@
         >
           Créer
         </v-btn>
+        <v-btn
+          flat
+          class="createButton"
+          @click="downloadLogs()"
+        >
+          Download
+        </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -19,7 +26,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-
+import globalLogging from '@/services/logging/globalLogging'
 export default {
     data(){
         return {
@@ -35,6 +42,9 @@ export default {
       async goHome(){
         await this.$router.push("/allProjects")
         this.setReloadPage(false)
+      },
+      async downloadLogs(){
+        return await globalLogging.downloadRequestLogs()
       }
     }
 }
